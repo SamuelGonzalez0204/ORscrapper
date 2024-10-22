@@ -63,15 +63,15 @@ BuscarValor <- function(textoBuscar, lines) {
 }
 
 
-BuscarVariable <- function(lines, textoBuscar){
+BuscarVariable <- function(lines, textoBuscar, posicion="1"){
   posicionValor <- grep(textoBuscar, lines)
   if (length(posicionValor) != 0){
     lineaValor <- lines[posicionValor[1]]
-    if (textoBuscar == patron_porcentaje_tumoral){
-      lineaValor <- sub("\\s*/.*", "", lineaValor)
-    }
-    valor <- sub(textoBuscar, "", lineaValor)
-    trimws(valor)
+      if (textoBuscar == ".*% células tumorales:\\s"){
+        lineaValor <- sub("\\s*/.*", "", lineaValor)
+      }
+      valor <- sub(textoBuscar, "", lineaValor)
+      trimws(valor)
   } else {
     "Null"
   }
@@ -103,11 +103,11 @@ acotarTexto<-function(textoInicio, textoInicio2, linesTotal){
 }
 
 
-ExtraerValor <-function(lista, lines, patron){
+ExtraerValorPrincipioFin <-function(lista, lines, patron){
   return(c(lista, BuscarVariable(lines, patron)))
 }
 
-ExtraerValorSinPatron <- function(lista, lines, textoBuscar){
+ExtraerValorIntermedio <- function(lista, lines, textoBuscar){
   return(unlist(c(lista, unique(BuscarValor(textoBuscar, lines)))))
 }
 
@@ -117,6 +117,58 @@ Biopsia <- function(numerosBiopsia){
   tipoBiopsia <- ifelse(tipobiopsia == "B", '1',
                         ifelse(tipobiopsia == "P", '2', '3'))
   return(tipoBiopsia)
+}
+
+Chip <- function(ficheros){
+  return(gsub(".*?([0-9]+\\.[0-9]+).*", "\\1", ficheros[grep("\\.pdf$", ficheros)]))
+}
+
+ExtraerValorDeTablas <- function(lines, inicio, inicio2,
+                                 genes_mut_ordenados = list(), patogenicidad_ordenadas = list(), frecuencias = list(), codificaciones = list(), valores = list()){
+  lines <- acotarTexto(inicio, inicio2 ,lines)
+  posiciones <- mutaciones_patogenicas <- lista_frec <- mutaciones_pdf <- patogenicidad <- lista_cod <- c()
+  lines_divididas <- strsplit(lines, "\\s+")
+  pos = 0
+  for (line in lines_divididas){
+    pos = pos+1
+    if (line[1] %in% mutaciones){
+      posiciones <- c(posiciones, pos)
+      mutaciones_pdf <- c(mutaciones_pdf, line[1])
+      for (i in strsplit(line, " ")) {
+        resultado <- str_match(i, patron_frecuencia)
+        resultado2 <- str_match(i, patron_codificacion)
+        if (!is.na(resultado)) {
+          frec <- resultado[1]
+          lista_frec <- c(lista_frec, frec)
+        }
+        else if (!is.na(resultado2)) {
+          cod <- resultado2[1]
+          lista_cod <- c(lista_cod, cod)
+        }
+      }
+    }
+  }
+  if (length(posiciones)!= 0){
+    for (pos in seq(1, length(posiciones))){
+      if (pos == length(posiciones)){
+        if (length(grep("pathogenicity", lines[posiciones[pos]:length(lines)])) == 1 || length(grep("Pathogenic", lines[posiciones[pos]:length(lines)])) == 1){
+          patogenicidad <- c(patogenicidad, "Pathogenic")
+        } else{
+          patogenicidad <- c(patogenicidad, "Sin resultados")
+        }
+      } else if(length(grep("pathogenicity", lines[posiciones[pos]:posiciones[pos+1]-1])) == 1 || length(grep("Pathogenic", lines[posiciones[pos]:posiciones[pos+1]-1])) == 1){
+        patogenicidad <- c(patogenicidad, "Pathogenic")
+      }else{
+        patogenicidad <- c(patogenicidad, "Sin resultados")
+      }
+    }
+  }
+  genes_mut_ordenados <- c(genes_mut_ordenados, list(mutaciones_pdf))
+  patogenicidad_ordenadas <- c(patogenicidad_ordenadas, list(patogenicidad))
+  frecuencias <- c(frecuencias, list(lista_frec))
+  codificaciones <- c(codificaciones, list(lista_cod))
+  valores <- c(genes_mut_ordenados, patogenicidad_ordenadas, frecuencias, codificaciones)
+  return(valores)
 }
 
 library(tools)
@@ -151,15 +203,15 @@ ficheros <- LeerFicherosPDF(rutaEntrada)
 
 NHC_Data <- NB_values <-Nbiopsia_Data <- fecha_Data <- texto_Data <- genes_mut2 <- genes_mut_ordenados <- frecuencias_totales <- num_mutaciones <- numero_iden <-
   añadir <- cambiosPato <- frecuenciasPato <- mutaciones_pato <- patogen <- numero_iden_pato <- num_mutacionesPato <-
-  diagnostico2 <- sexo <- porcentaje_tumoral <- calidad <- patogenicidad_buscadas <- cod_totales <-list()
+  diagnostico2 <- sexo <- porcentaje_tumoral <- calidad <- patogenicidad_buscadas <- cod_totales <- valoresTabla <-list()
 textoDiag <- NHC <- biopsia <- fechas <- chip2 <- fusiones <- character()
 numeroDiag <- lista_ensayos <- ensayos_finales <- lista_tratamientos <- tratamientos_finales <- numeric()
 
 benigno <- resultado <- FALSE
 max_mut <- 0
 
-patron <- "(\\d+)\\s* Ensayos clínicos"
-patron2 <- "(\\d+)\\s* Tratamientos disponibles"
+patron <- "Ensayos clínicos"
+patron2 <- "Tratamientos disponibles"
 patron_frecuencia <- "\\d{2}\\.\\d{2}\\%"
 patron_cambio <-"\\(.*?\\)"
 patron_codificacion <- "c\\.[0-9]+[A-Za-z>_]+"
@@ -176,32 +228,30 @@ textoLimite2 <-"Comentarios adicionales sobre las variantes"
 
 for (ficheroPDF in ficheros){
   lines <- LeerDocumento(ficheroPDF)
-  diagnostico2 <- ExtraerValor(diagnostico2, lines, patron_diagnostico)
-  sexo <- ExtraerValor(sexo, lines, patron_sexo)
-  porcentaje_tumoral <- ExtraerValor(porcentaje_tumoral, lines, patron_porcentaje_tumoral)
-  calidad <- ExtraerValor(calidad, lines, patron_calidad)
-  NHC_Data<- ExtraerValorSinPatron(NHC_Data, lines, "NHC:")
-  NB_values <- ExtraerValorSinPatron(NB_values, lines, "biopsia:")
-  fechas <- ExtraerValorSinPatron(fechas, lines, "Fecha:")
-  textoDiag <- ExtraerValorSinPatron(textoDiag, lines, "de la muestra:")
+  diagnostico2 <- ExtraerValorPrincipioFin(diagnostico2, lines, patron_diagnostico)
+  sexo <- ExtraerValorPrincipioFin(sexo, lines, patron_sexo)
+  porcentaje_tumoral <- ExtraerValorPrincipioFin(porcentaje_tumoral, lines, patron_porcentaje_tumoral)
+  calidad <- ExtraerValorPrincipioFin(calidad, lines, patron_calidad)
+  NHC_Data<- ExtraerValorIntermedio(NHC_Data, lines, "NHC:")
+  NB_values <- ExtraerValorIntermedio(NB_values, lines, "biopsia:")
+  fechas <- ExtraerValorIntermedio(fechas, lines, "Fecha:")
+  textoDiag <- ExtraerValorIntermedio(textoDiag, lines, "de la muestra:")
   Biopsia_solida <- Biopsia(NB_values)
-  lista_tratamientos <- ExtraerValor(lista_tratamientos, lines, patron)
+  lista_ensayos <- ExtraerValorPrincipioFin(lista_ensayos, lines, patron)
+  lista_tratamientos <- ExtraerValorPrincipioFin(lista_tratamientos, lines, patron2)
+  valoresTabla <- ExtraerValorDeTablas(lines, textoInicio, textoInicio2)
+  genes_mut_ordenados <- c(genes_mut_ordenados, valoresTabla[1])
+  patogenicidad_ordenadas <- c(patogenicidad_ordenadas, valoresTabla[2])
+  frecuencias_totales <- c(frecuencias_totales, valoresTabla[3])
+  cod_totales <- c(cod_totales, valoresTabla[4])
 }
 
-
-
-lista_ensayos <- as.integer(sapply(ficheros, function(ficheroPDF) {
-  lines <- LeerDocumento(ficheroPDF)
-  ensayos <- sapply(lines, function(line) {
-    resultado <- str_match(line, patron)
-    if (!is.na(resultado[1])) {
-      return(as.integer(resultado[1, 2]))
-    } else {
-      return(0)
-    }
-  })
-  return(sum(ensayos))
-}))
-
 ensayos_finales <- ifelse(lista_ensayos %in% 0, 0, 1)
+tratamientos_finales <- ifelse(lista_tratamientos %in% 0, 0, 1)
+
+chip2 <- Chip(ficheros)
+
+
+A<- 2; B<-4; C<- 5
+list(A, B, C) <- list(1, 2, 3)
 
