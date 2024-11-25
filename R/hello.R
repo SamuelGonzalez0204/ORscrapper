@@ -124,9 +124,9 @@ Chip <- function(ficheros){
 }
 
 ExtraerValorDeTablas <- function(lines, inicio, inicio2,
-                                 genes_mut_ordenados = list(), patogenicidad_ordenadas = list(), frecuencias = list(), codificaciones = list(), valores = list()){
+                                 genes_mut_ordenados = list(), patogenicidad_ordenadas = list(), frecuencias = list(), codificaciones = list(), cambios = list(), valores = list()){
   lines <- acotarTexto(inicio, inicio2 ,lines)
-  posiciones <- mutaciones_patogenicas <- lista_frec <- mutaciones_pdf <- patogenicidad <- lista_cod <- c()
+  posiciones <- mutaciones_patogenicas <- lista_frec <- mutaciones_pdf <- patogenicidad <- lista_cod <- lista_cambio <- c()
   lines_divididas <- strsplit(lines, "\\s+")
   pos = 0
   for (line in lines_divididas){
@@ -137,6 +137,7 @@ ExtraerValorDeTablas <- function(lines, inicio, inicio2,
       for (i in strsplit(line, " ")) {
         resultado <- str_match(i, patron_frecuencia)
         resultado2 <- str_match(i, patron_codificacion)
+        resultado3 <- str_match(i, "p\\.\\(.*?\\)")
         if (!is.na(resultado)) {
           frec <- resultado[1]
           lista_frec <- c(lista_frec, frec)
@@ -144,6 +145,10 @@ ExtraerValorDeTablas <- function(lines, inicio, inicio2,
         else if (!is.na(resultado2)) {
           cod <- resultado2[1]
           lista_cod <- c(lista_cod, cod)
+        }
+        if (!is.na(resultado3)) {
+          cambio <- resultado3[1]
+          lista_cambio <- c(lista_cambio, cambio)
         }
       }
     }
@@ -167,8 +172,55 @@ ExtraerValorDeTablas <- function(lines, inicio, inicio2,
   patogenicidad_ordenadas <- c(patogenicidad_ordenadas, list(patogenicidad))
   frecuencias <- c(frecuencias, list(lista_frec))
   codificaciones <- c(codificaciones, list(lista_cod))
-  valores <- c(genes_mut_ordenados, patogenicidad_ordenadas, frecuencias, codificaciones)
+  cambios <- append(cambios, list(unlist(lista_cambio)))
+  valores <- c(genes_mut_ordenados, patogenicidad_ordenadas, frecuencias, codificaciones, cambios)
   return(valores)
+}
+
+BuscarNCBI <- function(patogenicidad_ordenadas){
+  for (lista in seq_along(patogenicidad_ordenadas)){
+    patogenicidad <- c()
+    for (elemento in seq_along(patogenicidad_ordenadas[[lista]])){
+      gen = paste(genes_mut_ordenados[[lista]][[elemento]], "[gene]", cod_totales[[lista]][[elemento]])
+      res <- entrez_search(db = "clinvar", term = gen)
+      if (length(res$ids)!=0){
+        esums <- entrez_summary(db = "clinvar", id = res$ids[1])
+        resumen <- extract_from_esummary(esums, "germline_classification")
+        patogenicidad <- c(patogenicidad, resumen$description)
+      }
+      else{
+        patogenicidad <- c(patogenicidad, "Sin resultados")
+      }
+    }
+    patogenicidad_buscadas <- c(patogenicidad_buscadas, list(patogenicidad))
+  }
+  return(patogenicidad_buscadas)
+}
+
+Fusiones <- function(lines, mutaciones){
+  variantes <- character()
+  for (linea in lines) {
+    for (mutacion in mutaciones) {
+      patronGen <-paste0(mutacion, "\\.[A-Za-z0-9]+\\.[A-Za-z0-9]+")
+      if (grepl(patronGen, linea)) {
+        for (palabra in strsplit(linea, " ")[[1]]){
+          if (grepl(patronGen, palabra)){
+            variantes <- c(variantes, palabra)
+          }
+        }
+      }
+    }
+  }
+  fusiones <- append(fusiones, list(variantes))
+}
+
+SoloPatogenicos <- function(lista_patogenicos, lista2){
+  tamaño <- length(lista_patogenicos)
+  posiciones <- which(unlist(lista_patogenicos) == "Pathogenic")
+  listaReturn <- rep(NA, length(unlist(lista_patogenicos)))
+  listaReturn[posiciones] <- unlist(lista2)[posiciones]
+  grupos <- gl(tamaño, ceiling(length(listaReturn) / tamaño))
+  return(split(listaReturn, grupos))
 }
 
 library(tools)
@@ -203,7 +255,7 @@ ficheros <- LeerFicherosPDF(rutaEntrada)
 
 NHC_Data <- NB_values <-Nbiopsia_Data <- fecha_Data <- texto_Data <- genes_mut2 <- genes_mut_ordenados <- frecuencias_totales <- num_mutaciones <- numero_iden <-
   añadir <- cambiosPato <- frecuenciasPato <- mutaciones_pato <- patogen <- numero_iden_pato <- num_mutacionesPato <-
-  diagnostico2 <- sexo <- porcentaje_tumoral <- calidad <- patogenicidad_buscadas <- cod_totales <- valoresTabla <-list()
+  diagnostico2 <- sexo <- porcentaje_tumoral <- calidad <- patogenicidad_buscadas <- cod_totales <- valoresTabla <- cambios <-list()
 textoDiag <- NHC <- biopsia <- fechas <- chip2 <- fusiones <- character()
 numeroDiag <- lista_ensayos <- ensayos_finales <- lista_tratamientos <- tratamientos_finales <- numeric()
 
@@ -226,6 +278,9 @@ textoInicio2<-"   Variaciones del número de copias"
 textoLimite <- "Genes analizados"
 textoLimite2 <-"Comentarios adicionales sobre las variantes"
 
+cod_totales <- frecuencias_totales <-patogenicidad_ordenadas<- genes_mut_ordenados <- patogenicidad_buscadas<- list()
+
+
 for (ficheroPDF in ficheros){
   lines <- LeerDocumento(ficheroPDF)
   diagnostico2 <- ExtraerValorPrincipioFin(diagnostico2, lines, patron_diagnostico)
@@ -244,6 +299,8 @@ for (ficheroPDF in ficheros){
   patogenicidad_ordenadas <- c(patogenicidad_ordenadas, valoresTabla[2])
   frecuencias_totales <- c(frecuencias_totales, valoresTabla[3])
   cod_totales <- c(cod_totales, valoresTabla[4])
+  cambios <- c(cambios, valoresTabla[5])
+  fusiones <- Fusiones(lines, mutaciones)
 }
 
 ensayos_finales <- ifelse(lista_ensayos %in% 0, 0, 1)
@@ -251,7 +308,23 @@ tratamientos_finales <- ifelse(lista_tratamientos %in% 0, 0, 1)
 
 chip2 <- Chip(ficheros)
 
+patogenicidad_buscadas <- BuscarNCBI(patogenicidad_ordenadas)
 
-A<- 2; B<-4; C<- 5
-list(A, B, C) <- list(1, 2, 3)
+mutaciones_pato <- c()
+mutaciones_pato <- SoloPatogenicos(patogenicidad_ordenadas, genes_mut_ordenados)
 
+cambiosPato <- SoloPatogenicos(patogenicidad_ordenadas, cambios)
+frecuenciasPato <- SoloPatogenicos(patogenicidad_ordenadas, frecuencias_totales)
+
+
+for (lista in genes_mut_ordenados){
+  num_mutaciones<- c(num_mutaciones, length(lista))
+}
+
+for (i in genes_mut_ordenados){
+  for (gen in i){
+    añadir <- c(añadir, mutaciones_dic[[gen]])
+  }
+  numero_iden <- c(numero_iden, list(unlist(añadir)))
+  añadir <- list()
+}
