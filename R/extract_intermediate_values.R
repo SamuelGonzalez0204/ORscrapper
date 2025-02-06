@@ -5,7 +5,6 @@
 #' @param search_text Character. The pattern to search for in the text lines.
 #' @param lines Character vector. The lines of text to search within.
 #' @return A character vector with extracted values matching the search criteria.
-#' @export
 search_value <- function(search_text, lines) {
   found_values <- character()
   matching_indices <- which(grepl(search_text, lines))

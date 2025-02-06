@@ -8,7 +8,6 @@
 #' @param text_limit Character vector. The text marker indicating the end of the subset.
 #' @param text_limit2 Character vector. An optional secondary end marker.
 #' @return A character vector containing the extracted lines.
-#' @export
 narrow_text <- function(start_text, start_text2 = "   Variaciones del número de copias", lines_total, text_limit, text_limit2 = "Comentarios adicionales sobre las variantes") {
   extracted_lines <- character()
   start_indices <- grep(start_text, lines_total)
