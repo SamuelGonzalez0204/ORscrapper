@@ -3,7 +3,7 @@
 #' This function analyzes biopsy identifiers and categorizes them into specific types based on a defined rule.
 #'
 #' @param biopsy_numbers Character vector. Identifiers of biopsies to classify.
-#' @return A character vector representing the type of biopsy: '1', '2', or '3'.
+#' @return A character vector representing the type of Sample type: 1, biopsy; 2, aspiration; and 3, cytology.
 #' @export
 classify_biopsy <- function(biopsy_numbers) {
   biopsy_lists <- lapply(biopsy_numbers, function(x) list(x))
