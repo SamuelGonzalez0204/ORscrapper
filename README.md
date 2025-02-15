@@ -1,4 +1,4 @@
-![Logo de ORscrapper](https://github.com/SamuelGonzalez0204/ORscrapper/tree/master/inst/extdata/ORscrapperLogo.png)
+![Logo de ORscrapper](https://github.com/SamuelGonzalez0204/ORscrapper/blob/master/inst/extdata/ORscrapperLogo.png)
 
 
 # ORscrapper: An R Package for for extracting data from clinical reports.
