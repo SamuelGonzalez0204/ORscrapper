@@ -1,7 +1,7 @@
 <img src="https://github.com/SamuelGonzalez0204/ORscrapper/blob/master/inst/extdata/ORscrapperLogo.png" alt="Logo de ORscrapper" width="200"/>
 
 
-# ORscrapper: An R Package for for extracting data from clinical reports.
+# ORscrapper: An R Package for for extracting data from Oncomine Reporter's clinical reports .
 
 ## Overview
 
@@ -23,6 +23,25 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 
 # Install ORscrapper from GitHub
 devtools::install_github("SamuelGonzalez0204/ORscrapper")
+```
+
+## Basic Usage
+Below is a basic example of how to use ORscrapper to extract information from PDF files:
+```r
+library(ORscrapper)
+
+# Read content from a PDF file
+pdf_text <- read_pdf_content("clinical_report.pdf")
+
+# Extract mutations values from the extracted text
+tableValues <- extract_values_from_tables(lines, mutations)
+genes_mut <- c(genes_mut, tableValues[1])
+pathogenicities <- c(pathogenicities, tableValues[2])
+
+# Filter only pathogenic mutations
+pathogenic_mutations <- filter_pathogenic_only(pathogenicities, genes_mut)
+
+print(pathogenic_mutations)
 ```
 
 ## Main Functions
