@@ -70,7 +70,7 @@ The ORscrapper package includes several key functions:
 
 ## Shiny App
 
-For users who prefer a graphical interface, the ORscrapper Shiny app allows you to interact with the data without programming knowledge: [github.com/SamuelGonzalez0204/PDF-Scrapping](https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp)
+For users who prefer a graphical interface, the ORscrapper Shiny app allows you to interact with the data without programming knowledge: [github.com/SamuelGonzalez0204/ORscrapper_ShinyApp](https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp)
 
 ## Reporting Issues and Contributions
 
