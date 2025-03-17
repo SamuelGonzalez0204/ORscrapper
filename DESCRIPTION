@@ -15,7 +15,8 @@ Imports:
     pdftools,
     stringr,
     dplyr,
-    rentrez
+    rentrez,
+    readxl
 Suggests: 
     testthat (>= 3.0.0),
     rmarkdown,

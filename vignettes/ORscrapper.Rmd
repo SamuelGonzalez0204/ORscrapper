@@ -119,11 +119,11 @@ search_ncbi_clinvar(): This function queries the NCBI ClinVar database for germl
 
 First, retrieve a list of all PDF files from the specified directory using the LeerFicherosPDF() function.
 ```{r}
-Inputfolder <- "inst"
-ReportFolder <- "extdata"
-PathBase <- getwd()
-InputPath <- file.path(PathBase, Inputfolder, ReportFolder)
+InputPath <- system.file("extdata", package = "ORscrapper")
 files <- read_pdf_files(InputPath)
+genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
+genes <- read_excel(gene_file)
+mutations <- unique(genes$GEN)
 ```
 
 # Step 2: Extract Text from PDFs
@@ -140,6 +140,7 @@ head(lines)
 Use predefined patterns to extract diagnostic information, gender, tumor cell percentage, and sample quality.
 
 ```{r}
+diagnostic <- gender <- tumor_cell_percentage <- quality <- c()
 diagnostic <- extract_values_start_end(diagnostic, lines, ".*Diagnóstico:\\s")
 gender <- extract_values_start_end(gender, lines, ".*Sexo:\\s*")
 tumor_cell_percentage <- extract_values_start_end(tumor_cell_percentage, lines, ".*% células tumorales:\\s")
@@ -152,6 +153,7 @@ quality <- extract_values_start_end(quality, lines, ".*CALIDAD DE LA MUESTRA /LI
 Extract other relevant values such as patient ID, biopsy number, sample date, and diagnostic text.
 
 ```{r}
+NHC_Data <- NB_values <- dates <- textDiag <- c()
 NHC_Data <- extract_intermediate_values(NHC_Data, lines, "NHC:")
 NB_values <- extract_intermediate_values(NB_values, lines, "biopsia:")
 dates <- extract_intermediate_values(dates, lines, "Fecha:")
