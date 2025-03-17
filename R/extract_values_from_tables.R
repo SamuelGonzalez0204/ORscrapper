@@ -8,7 +8,7 @@
 #' @param text_limit Character vector. The text marker indicating the end of the subset.
 #' @param text_limit2 Character vector. An optional secondary end marker.
 #' @return A character vector containing the extracted lines.
-narrow_text <- function(start_text, start_text2 = "   Variaciones del número de copias", lines_total, text_limit, text_limit2 = "Comentarios adicionales sobre las variantes") {
+narrow_text <- function(start_text, start_text2 = "   Variaciones del n\u00famero de copias", lines_total, text_limit, text_limit2 = "Comentarios adicionales sobre las variantes") {
   extracted_lines <- character()
   start_indices <- grep(start_text, lines_total)
   start_indices2 <- grep(start_text2, lines_total)
@@ -56,7 +56,7 @@ extract_values_from_tables <- function(lines, mutations,
                                        genes_mutated = list(), pathogenicity = list(), frequencies = list(),
                                        codifications = list(), changes = list(), values = list(),
                                        start = "Variantes de secuencia de ADN",
-                                       start2 = "   Variaciones del número de copias",
+                                       start2 = "   Variaciones del n\u00famero de copias",
                                        end = "Genes analizados",
                                        end2 ="Comentarios adicionales sobre las variantes") {
   lines <- narrow_text(start, start2, lines, end, end2)

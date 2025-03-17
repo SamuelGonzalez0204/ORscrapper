@@ -124,7 +124,7 @@ if (!requireNamespace("readxl", quietly = TRUE)) {
 InputPath <- system.file("extdata", package = "ORscrapper")
 files <- read_pdf_files(InputPath)
 genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
-genes <- read_excel(genes_file)
+genes <- readxl::read_excel(genes_file)
 mutations <- unique(genes$GEN)
 ```
 

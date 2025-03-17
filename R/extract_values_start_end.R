@@ -9,7 +9,7 @@ extract_variable <- function(lines, search_text) {
   matched_indices <- grep(search_text, lines)
   if (length(matched_indices) != 0) {
     matched_line <- lines[matched_indices[1]]
-    if (search_text == ".*% células tumorales:\\s") {
+    if (search_text == ".*% c\u00e9lulas tumorales:\\s") {
       matched_line <- sub("\\s*/.*", "", matched_line)
     }
     value <- sub(search_text, "", matched_line)
