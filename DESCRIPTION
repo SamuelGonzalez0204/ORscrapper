@@ -16,10 +16,11 @@ Imports:
     stringr,
     dplyr,
     rentrez,
-    readxl
 Suggests: 
     testthat (>= 3.0.0),
     rmarkdown,
-    knitr
+    knitr,    
+    readxl,
+    mockery
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -118,7 +118,9 @@ search_ncbi_clinvar(): This function queries the NCBI ClinVar database for germl
 First, retrieve a list of all PDF files from the specified directory using the LeerFicherosPDF() function.
 
 ```{r}
-library(readxl)
+if (!requireNamespace("readxl", quietly = TRUE)) {
+  stop("The readxl package is required for this vignette, install it with install.packages('readxl').")
+}
 InputPath <- system.file("extdata", package = "ORscrapper")
 files <- read_pdf_files(InputPath)
 genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")

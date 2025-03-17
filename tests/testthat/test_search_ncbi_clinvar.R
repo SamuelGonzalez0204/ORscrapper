@@ -1,6 +1,7 @@
 library(testthat)
 library(mockery)
 
+if (requireNamespace("mockery", quietly = TRUE)) {
 # Step 1: Test if the function correctly retrieves pathogenicity information from NCBI ClinVar
 test_that("search_ncbi_clinvar correctly retrieves pathogenicity information", {
 
@@ -50,3 +51,4 @@ test_that("search_ncbi_clinvar handles missing ClinVar results correctly", {
   # Check if the function correctly returns "No results"
   expect_equal(result, list(c("No results")))
 })
+}
