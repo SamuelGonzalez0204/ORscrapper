@@ -119,8 +119,8 @@ search_ncbi_clinvar(): This function queries the NCBI ClinVar database for germl
 
 First, retrieve a list of all PDF files from the specified directory using the LeerFicherosPDF() function.
 ```{r}
-Inputfolder <- "INPUT"
-ReportFolder <- "Informes"
+Inputfolder <- "inst"
+ReportFolder <- "extdata"
 PathBase <- getwd()
 InputPath <- file.path(PathBase, Inputfolder, ReportFolder)
 files <- read_pdf_files(InputPath)

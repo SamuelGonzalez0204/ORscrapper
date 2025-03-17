@@ -10,7 +10,7 @@ classify_biopsy(biopsy_numbers)
 \item{biopsy_numbers}{Character vector. Identifiers of biopsies to classify.}
 }
 \value{
-A character vector representing the type of biopsy: '1', '2', or '3'.
+A character vector representing the type of Sample type: 1, biopsy; 2, aspiration; and 3, cytology.
 }
 \description{
 This function analyzes biopsy identifiers and categorizes them into specific types based on a defined rule.
