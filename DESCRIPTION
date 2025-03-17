@@ -7,7 +7,7 @@ Authors@R:
 Description: Provides tools to extract and analyze data from PDF files,
     including searching for specific patterns, extracting tables, and
     identifying biomarkers.
-License: GPL-3
+License: MIT
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 Depends: R (>= 4.0.0)
