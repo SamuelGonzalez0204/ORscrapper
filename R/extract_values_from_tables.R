@@ -60,7 +60,7 @@ extract_values_from_tables <- function(lines, mutations,
                                        end = "Genes analizados",
                                        end2 ="Comentarios adicionales sobre las variantes") {
   lines <- narrow_text(start, start2, lines, end, end2)
-  positions <- mut_pats <- freq_list <- pdf_mutations <- patho_list <- cod_list <- change_list <- c()
+  positions <- freq_list <- pdf_mutations <- patho_list <- cod_list <- change_list <- c()
   split_lines <- strsplit(lines, "\\s+")
 
   frequency_pattern <- "\\d{2}\\.\\d{2}\\%"
