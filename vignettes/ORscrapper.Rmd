@@ -46,16 +46,18 @@ The input files must be in PDF format and follow the standard structure of clini
 
 Each clinical report follows this structure:
 
-    - Analysis indication and scope.
-    - Sample details.
-    - Relevant biomarkers.
-    - Tables containing genetic variant details (if they were detected):
-        - DNA sequence variants.
-        - Copy number variations (CNV).
-        - Gene fusions.
-    - Analyzed genes
-    - Analytical method
-    - Study limitations.
+```         
+- Analysis indication and scope.
+- Sample details.
+- Relevant biomarkers.
+- Tables containing genetic variant details (if they were detected):
+    - DNA sequence variants.
+    - Copy number variations (CNV).
+    - Gene fusions.
+- Analyzed genes
+- Analytical method
+- Study limitations.
+```
 
 # Processing Multiple Files
 
@@ -65,12 +67,9 @@ ORscrapper supports the analysis of multiple reports simultaneously, streamlinin
 
 For better organization, the following directory structure is recommended when specifying file paths in the code:
 
-InputFolder <- "INPUT"
-ReportFolder <- "Reports"
-BasePath <- getwd()
-inputPath <- file.path(BasePath, InputFolder, ReportFolder)
+InputFolder \<- "INPUT" ReportFolder \<- "Reports" BasePath \<- getwd() inputPath \<- file.path(BasePath, InputFolder, ReportFolder)
 
-Alternatively, users can leverage the Shiny application available in this repository (https://github.com/SamuelGonzalez0204/PDF-Scrapping), which allows file selection via a graphical interface, eliminating the need to manually specify file paths.
+Alternatively, users can leverage the Shiny application available in this repository (<https://github.com/SamuelGonzalez0204/PDF-Scrapping>), which allows file selection via a graphical interface, eliminating the need to manually specify file paths.
 
 # Recommended Naming Convention
 
@@ -92,7 +91,7 @@ Users can utilize this file to better understand the expected input data format.
 
 The ORscrapper package provides various functions for extracting data from clinical reports:
 
-classify_biopsy(): This function analyzes biopsy identifiers and categorizes them into specific types based on a defined rule. 1 <- biopsy; 2 <- aspiration; 3 <- cytology.
+classify_biopsy(): This function analyzes biopsy identifiers and categorizes them into specific types based on a defined rule. 1 \<- biopsy; 2 \<- aspiration; 3 \<- cytology.
 
 extract_chip_id(): This function retrieves chip values from file names matching a specific pattern.
 
@@ -114,15 +113,16 @@ search_ncbi_clinvar(): This function queries the NCBI ClinVar database for germl
 
 ## Example Workflow
 
-
-# Step 1:  Load and Process PDF Files
+# Step 1: Load and Process PDF Files
 
 First, retrieve a list of all PDF files from the specified directory using the LeerFicherosPDF() function.
+
 ```{r}
+library(readxl)
 InputPath <- system.file("extdata", package = "ORscrapper")
 files <- read_pdf_files(InputPath)
 genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
-genes <- read_excel(gene_file)
+genes <- read_excel(genes_file)
 mutations <- unique(genes$GEN)
 ```
 
@@ -147,7 +147,6 @@ tumor_cell_percentage <- extract_values_start_end(tumor_cell_percentage, lines, 
 quality <- extract_values_start_end(quality, lines, ".*CALIDAD DE LA MUESTRA /LIMITACIONES PARA SU ANÁLISIS:\\s")
 ```
 
-
 # Step 4: Extract Additional Information
 
 Extract other relevant values such as patient ID, biopsy number, sample date, and diagnostic text.
@@ -165,7 +164,7 @@ textDiag <- extract_intermediate_values(textDiag, lines, "de la muestra:")
 Identify genetic mutations and their characteristics from tables within the reports.
 
 ```{r}
-TableValues <- extract_values_from_tables(lines, "Variantes de secuencia de ADN", "Variaciones del número de copias", mutations)
+TableValues <- extract_values_from_tables(lines, mutations)
 mutateGenes <- TableValues[[1]]
 pathogenity <- TableValues[[2]]
 frequencies <- TableValues[[3]]
@@ -186,7 +185,7 @@ fusions <- extract_fusions(lines, mutations)
 Query the NCBI ClinVar database to retrieve pathogenicity classifications for detected mutations.
 
 ```{r}
-search_pathogenity <- search_ncbi_clinvar(pathogenity)
+search_pathogenity <- search_ncbi_clinvar(pathogenity, mutateGenes, codifications)
 ```
 
 # Step 8: Filter Pathogenic Mutations
@@ -223,7 +222,7 @@ You can customize the mutations and diagnoses to process by uploading an Excel f
 
 For users who prefer a graphical user interface, ORscrapper includes a Shiny app. This app allows you to interact with the data visually, upload clinical reports aand save data tables on MongoDB commpass local databases.
 
-Access the Shiny app repository: https://github.com/SamuelGonzalez0204/PDF-Scrapping
+Access the Shiny app repository: <https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp>
 
 ## Conclusion
 
