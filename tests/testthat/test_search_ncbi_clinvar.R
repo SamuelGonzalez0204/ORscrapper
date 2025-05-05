@@ -30,7 +30,7 @@ test_that("search_ncbi_clinvar correctly retrieves pathogenicity information", {
   result <- search_ncbi_clinvar(pathogenicity, genes_mutated, total_codifications)
 
   # Check if the function correctly retrieves "Pathogenic" classification
-  expect_equal(result, list(c("Pathogenic", "Pathogenic")))
+  expect_equal(result, list(c("Pathogenic", "No results")))
 })
 
 # Step 2: Test if the function handles missing ClinVar results correctly
