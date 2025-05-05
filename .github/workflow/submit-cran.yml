@@ -1,5 +1,4 @@
-name: R Package CRAN Submission
-uses: coatless-actions/cran-submission@v1
+name: Submit to CRAN
 
 on:
   release:
