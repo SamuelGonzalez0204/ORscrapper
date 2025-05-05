@@ -1,6 +1,6 @@
 Package: ORscrapper
 Type: Package
-Title: R package for extracting clinical report data from Oncomine Reporter and NCBI ClinVar
+Title: Extract information from clinical reports from Oncomine Reporter and NCBI ClinVar
 Version: 0.1.0
 Authors@R: 
     person(
