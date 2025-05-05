@@ -50,3 +50,20 @@ A list containing extracted data: genes, pathogenicity, frequencies, codificatio
 \description{
 This function analyzes a subset of text lines, extracting information such as mutations, pathogenicity, frequencies, codifications and changes.
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+lines <- read_pdf_content(files[1])  # Example with the first file
+
+genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
+genes <- readxl::read_excel(genes_file)
+mutations <- unique(genes$GEN)
+
+TableValues <- extract_values_from_tables(lines, mutations)
+mutateGenes <- TableValues[[1]]
+pathogenity <- TableValues[[2]]
+frequencies <- TableValues[[3]]
+codifications <- TableValues[[4]]
+changes <- TableValues[[5]]
+
+}

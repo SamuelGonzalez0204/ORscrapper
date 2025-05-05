@@ -15,3 +15,8 @@ A character vector with the full paths of the PDF files.
 \description{
 This function scans a specified directory and retrieves all files with a .pdf extension.
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+
+}

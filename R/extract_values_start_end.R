@@ -27,6 +27,23 @@ extract_variable <- function(lines, search_text) {
 #' @param lines Character vector. The text lines to search within.
 #' @param pattern Character. The pattern to search for.
 #' @return An updated list with appended values.
+#'
+#' @examples
+#' InputPath <- system.file("extdata", package = "ORscrapper")
+#' files <- read_pdf_files(InputPath)
+#' lines <- read_pdf_content(files[1])  # Example with the first file
+#' diagnostic <- gender <- tumor_cell_percentage <- quality <- c()
+#' diagnostic <- extract_values_start_end(diagnostic, lines, ".*Diagnóstico:\\s")
+#' gender <- extract_values_start_end(gender, lines, ".*Sexo:\\s*")
+#' tumor_cell_percentage <- extract_values_start_end(
+#'                                 tumor_cell_percentage,
+#'                                 lines,
+#'                                 ".*% células tumorales:\\s")
+#' quality <- extract_values_start_end(
+#'                                 quality,
+#'                                 lines,
+#'                                 ".*CALIDAD DE LA MUESTRA /LIMITACIONES PARA SU ANÁLISIS:\\s")
+
 #' @export
 extract_values_start_end <- function(list_input, lines, pattern) {
   return(c(list_input, extract_variable(lines, pattern)))

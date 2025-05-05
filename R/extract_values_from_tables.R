@@ -50,6 +50,22 @@ narrow_text <- function(start_text, start_text2 = "   Variaciones del n\u00famer
 #' @param end2 secondary end marker.
 #' @return A list containing extracted data: genes, pathogenicity, frequencies, codifications and changes.
 #'
+#' @examples
+#' InputPath <- system.file("extdata", package = "ORscrapper")
+#' files <- read_pdf_files(InputPath)
+#' lines <- read_pdf_content(files[1])  # Example with the first file
+#'
+#' genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
+#' genes <- readxl::read_excel(genes_file)
+#' mutations <- unique(genes$GEN)
+#'
+#' TableValues <- extract_values_from_tables(lines, mutations)
+#' mutateGenes <- TableValues[[1]]
+#' pathogenity <- TableValues[[2]]
+#' frequencies <- TableValues[[3]]
+#' codifications <- TableValues[[4]]
+#' changes <- TableValues[[5]]
+#'
 #' @import stringr
 #' @export
 extract_values_from_tables <- function(lines, mutations,
@@ -73,9 +89,9 @@ extract_values_from_tables <- function(lines, mutations,
       positions <- c(positions, pos)
       pdf_mutations <- c(pdf_mutations, line[1])
       for (item in strsplit(line, " ")) {
-        freq_match <- str_match(item, frequency_pattern)
-        cod_match <- str_match(item, codification_pattern)
-        change_match <- str_match(item, "p\\.\\(.*?\\)")
+        freq_match <- stringr::str_match(item, frequency_pattern)
+        cod_match <- stringr::str_match(item, codification_pattern)
+        change_match <- stringr::str_match(item, "p\\.\\(.*?\\)")
 
         if (!is.na(freq_match)) {
           freq_list <- c(freq_list, freq_match[1])

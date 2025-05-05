@@ -19,3 +19,14 @@ An updated list with appended values.
 \description{
 This function retrieves unique matches for a search pattern within text lines.
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+lines <- read_pdf_content(files[1])  # Example with the first file
+NHC_Data <- NB_values <- dates <- textDiag <- c()
+NHC_Data <- extract_intermediate_values(NHC_Data, lines, "NHC:")
+NB_values <- extract_intermediate_values(NB_values, lines, "biopsia:")
+dates <- extract_intermediate_values(dates, lines, "Fecha:")
+textDiag <- extract_intermediate_values(textDiag, lines, "de la muestra:")
+
+}

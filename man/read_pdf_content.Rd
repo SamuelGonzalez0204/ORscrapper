@@ -15,3 +15,10 @@ A character vector, where each element is a line from the PDF content.
 \description{
 This function extracts the text content from a PDF file and splits it into individual lines.
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+lines <- read_pdf_content(files[1])
+head(lines)
+
+}

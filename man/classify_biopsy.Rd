@@ -19,3 +19,14 @@ A character vector representing the type of Sample type:
 This function analyzes biopsy identifiers and categorizes them into specific
 types based on a defined rule.
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+lines <- read_pdf_content(files[1])  # Example with the first file
+
+NB_values <- c()
+NB_values <- extract_intermediate_values(NB_values, lines, "biopsia:")
+
+biopsies_identifiers <- classify_biopsy(NB_values)
+
+}

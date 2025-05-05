@@ -11,7 +11,7 @@ test_that("search_ncbi_clinvar correctly retrieves pathogenicity information", {
   total_codifications <- list(list("c.1234A>T", "c.5678G>C"))
 
   # Mock entrez_search to simulate a successful search in ClinVar
-  mock_entrez_search <- mockery:::mock(list(ids = c("12345")), cycle = TRUE)
+  mock_entrez_search <- mockery::mock(list(ids = c("12345")), cycle = TRUE)
   stub(search_ncbi_clinvar, "entrez_search", mock_entrez_search)
 
   # Mock entrez_summary to return fake ClinVar data

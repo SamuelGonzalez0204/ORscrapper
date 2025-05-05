@@ -15,3 +15,10 @@ A character vector of chip identifiers extracted from the file names.
 \description{
 This function retrieves chip values from file names matching a specific pattern.
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+
+chips <- extract_chip_id(files)
+
+}

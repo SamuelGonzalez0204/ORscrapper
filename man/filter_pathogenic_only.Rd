@@ -17,3 +17,23 @@ A list containing only the elements of the related list corresponding to "Pathog
 \description{
 This function filters a list of pathogenicity classifications, retaining only those marked as "Pathogenic".
 }
+\examples{
+InputPath <- system.file("extdata", package = "ORscrapper")
+files <- read_pdf_files(InputPath)
+lines <- read_pdf_content(files[1])  # Example with the first file
+
+genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
+genes <- readxl::read_excel(genes_file)
+mutations <- unique(genes$GEN)
+
+TableValues <- extract_values_from_tables(lines, mutations)
+mutateGenes <- TableValues[[1]]
+pathogenity <- TableValues[[2]]
+frequencies <- TableValues[[3]]
+changes <- TableValues[[5]]
+
+pathogenic_mutations <- filter_pathogenic_only(pathogenity, mutateGenes)
+pathogenic_changes <- filter_pathogenic_only(pathogenity, changes)
+pathogenic_frequencies <- filter_pathogenic_only(pathogenity, frequencies)
+
+}

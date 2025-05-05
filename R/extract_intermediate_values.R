@@ -37,6 +37,17 @@ search_value <- function(search_text, lines) {
 #' @param lines Character vector. The text lines to search within.
 #' @param search_text Character. The pattern to search for.
 #' @return An updated list with appended values.
+#'
+#' @examples
+#' InputPath <- system.file("extdata", package = "ORscrapper")
+#' files <- read_pdf_files(InputPath)
+#' lines <- read_pdf_content(files[1])  # Example with the first file
+#' NHC_Data <- NB_values <- dates <- textDiag <- c()
+#' NHC_Data <- extract_intermediate_values(NHC_Data, lines, "NHC:")
+#' NB_values <- extract_intermediate_values(NB_values, lines, "biopsia:")
+#' dates <- extract_intermediate_values(dates, lines, "Fecha:")
+#' textDiag <- extract_intermediate_values(textDiag, lines, "de la muestra:")
+#'
 #' @export
 extract_intermediate_values <- function(list_input, lines, search_text) {
   return(unlist(c(list_input, unique(search_value(search_text, lines)))))
