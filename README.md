@@ -82,7 +82,7 @@ Contributions are welcome. If you would like to collaborate, you can fork the re
 
 ## Acknowledgments
 
-I would like to express my sincere gratitude to my thesis advisor, José Antonio Canepa, as well as to Patricia Sáiz, healthcare professional in the Pathological Anatomy team at the University Hospital of Burgos, for their valuable feedback and support throughout the entire project.
+I would like to express my sincere gratitude to my thesis advisor, Antonio Canepa-Oneto, Lecturer at the University of Burgos; as well as to Patricia Sáiz, healthcare professional in the Pathological Anatomy team at the University Hospital of Burgos, for their valuable feedback and support throughout the entire project.
 
 ## License
 
