@@ -1,7 +1,7 @@
 <img src="https://github.com/SamuelGonzalez0204/ORscrapper/blob/master/inst/extdata/ORscrapperLogo.png" alt="Logo de ORscrapper" width="200"/>
 
 
-# ORscrapper: An R Package for for extracting data from Oncomine Reporter's clinical reports .
+# ORscrapper: An R Package for extracting data from Oncomine Reporter's clinical reports .
 
 ## Overview
 
@@ -70,15 +70,7 @@ The ORscrapper package includes several key functions:
 
 ## Shiny App
 
-For users who prefer a graphical interface, the ORscrapper Shiny app allows you to interact with the data without programming knowledge: [github.com/SamuelGonzalez0204/ORscrapper_ShinyApp](https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp)
-
-## Reporting Issues and Contributions
-
-If you encounter any issues or would like to contribute to the development of ORscrapper, please open an issue on the GitHub repository:
-
-[GitHub Issues](https://github.com/SamuelGonzalez0204/ORscrapper/issues)
-
-Contributions are welcome. If you would like to collaborate, you can fork the repository, create a new branch with your changes, and submit a pull request.
+For users who prefer a graphical interface, the ORscrapper Shiny app allows you to interact with the data without programming knowledge: [https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp](https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp)
 
 ## Acknowledgments
 
