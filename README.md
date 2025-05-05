@@ -72,14 +72,6 @@ The ORscrapper package includes several key functions:
 
 For users who prefer a graphical interface, the ORscrapper Shiny app allows you to interact with the data without programming knowledge: [https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp](https://github.com/SamuelGonzalez0204/ORscrapper_ShinyApp)
 
-## Reporting Issues and Contributions
-
-If you encounter any issues or would like to contribute to the development of ORscrapper, please open an issue on the GitHub repository:
-
-[https://github.com/SamuelGonzalez0204/ORscrapper/issues](https://github.com/SamuelGonzalez0204/ORscrapper/issues)
-
-Contributions are welcome. If you would like to collaborate, you can fork the repository, create a new branch with your changes, and submit a pull request.
-
 ## Acknowledgments
 
 I would like to express my sincere gratitude to my thesis advisor, Antonio Canepa-Oneto, Lecturer at the University of Burgos; as well as to Patricia Sáiz, healthcare professional in the Pathological Anatomy team at the University Hospital of Burgos, for their valuable feedback and support throughout the entire project.
