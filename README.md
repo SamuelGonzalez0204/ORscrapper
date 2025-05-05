@@ -1,7 +1,7 @@
 <img src="https://github.com/SamuelGonzalez0204/ORscrapper/blob/master/inst/extdata/ORscrapperLogo.png" alt="Logo de ORscrapper" width="200"/>
 
 
-# ORscrapper: An R Package for for extracting data from Oncomine Reporter's clinical reports .
+# ORscrapper: An R Package for extracting data from Oncomine Reporter's clinical reports .
 
 ## Overview
 
