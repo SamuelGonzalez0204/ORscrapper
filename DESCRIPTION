@@ -3,8 +3,11 @@ Type: Package
 Title: R package for extracting clinical report data from Oncomine Reporter and NCBI ClinVar
 Version: 0.1.0
 Authors@R: 
-    person("Samuel", "González", "samugonz0204@gmail.com", role = c("aut", "cre"),
-	   comment = c(ORCID = "0009-0007-9531-9821"))
+    person(
+	"Samuel", "González", 
+	email = "samugonz0204@gmail.com", 
+	role = c("aut", "cre"),
+	comment = c(ORCID = "0009-0007-9531-9821"))
 Description: Provides tools to extract and analyze data from PDF files,
     including searching for specific patterns, extracting tables, and
     identifying biomarkers.
