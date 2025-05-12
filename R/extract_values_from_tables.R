@@ -15,20 +15,22 @@ narrow_text <- function(start_text, start_text2 = "   Variaciones del n\u00famer
   limit_index <- grep(text_limit, lines_total)[1]
   limit_index2 <- grep(text_limit2, lines_total)
 
-  if (length(start_indices2) != 0 || length(start_indices) > 1) {
-    if (length(start_indices2) != 0 && length(start_indices) != 0) {
-      extracted_lines <- lines_total[(start_indices + 1):(limit_index - 1)]
-    } else if (length(limit_index2) != 0 && length(start_indices) != 0) {
-      extracted_lines <- lines_total[(start_indices + 1):(limit_index2[1] - 1)]
-    } else if (length(start_indices2) != 0) {
-      extracted_lines <- lines_total[(start_indices2 + 1):(limit_index - 1)]
-    } else {
+  if (length(limit_index) != 0 && !is.na(limit_index)){
+    if (length(start_indices2) != 0 || length(start_indices) > 1) {
+      if (length(start_indices2) != 0 && length(start_indices) != 0) {
+        extracted_lines <- lines_total[(start_indices + 1):(limit_index - 1)]
+      } else if (length(limit_index2) != 0 && length(start_indices) != 0) {
+        extracted_lines <- lines_total[(start_indices + 1):(limit_index2[1] - 1)]
+      } else if (length(start_indices2) != 0) {
+        extracted_lines <- lines_total[(start_indices2 + 1):(limit_index - 1)]
+      } else {
+        extracted_lines <- lines_total[(start_indices + 1):(limit_index - 1)]
+      }
+    } else if (length(start_indices2) == 0 && length(start_indices) == 0) {
+      extracted_lines <- c(extracted_lines, "No biomarkers")
+    } else{
       extracted_lines <- lines_total[(start_indices + 1):(limit_index - 1)]
     }
-  } else if (length(start_indices2) == 0 && length(start_indices) == 0) {
-    extracted_lines <- c(extracted_lines, "No biomarkers")
-  } else if (length(limit_index) != 0){
-    extracted_lines <- lines_total[(start_indices + 1):(limit_index - 1)]
   }
   return(extracted_lines)
 }

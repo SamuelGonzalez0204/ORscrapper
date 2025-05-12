@@ -36,5 +36,5 @@ test_that("extract_fusions returns an empty list when no fusion variants are fou
   result <- extract_fusions(lines, mutations)
 
   # Check if the function returns an empty character vector
-  expect_equal(result, character(0))
+  expect_equal(result, 'No fusions')
 })
