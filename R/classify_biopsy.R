@@ -23,7 +23,7 @@
 classify_biopsy <- function(biopsy_numbers) {
   biopsy_lists <- lapply(biopsy_numbers, function(x) list(x))
   biopsy_type_codes <- sapply(biopsy_lists, function(x) substr(x, 5, 5))
-  biopsy_types <- ifelse(biopsy_type_codes == "B", '1',
-                         ifelse(biopsy_type_codes == "P", '2', '3'))
+  biopsy_types <- ifelse(biopsy_type_codes == 'B', '1',
+                         ifelse(biopsy_type_codes == 'P', '2', '3'))
   return(biopsy_types)
 }
