@@ -32,5 +32,10 @@ extract_fusions <- function(lines, mutations) {
       }
     }
   }
-  return(variants)
+  if (length(variants)!=0){
+    return(variants)
+  }
+  else{
+    return("No fusions")
+  }
 }
