@@ -23,13 +23,13 @@
 #'
 #' search_pathogenity <- search_ncbi_clinvar(pathogenity, mutateGenes, codifications)
 #'
-#' @import rentrez
+#' @importFrom rentrez entrez_search entrez_summary extract_from_esummary
 #' @export
 search_ncbi_clinvar <- function(pathogenicity, genes_mutated, total_codifications) {
   searched_pathogenicity <- list()
-  for (list_index in seq_along(pathogenicity)) {
+  for (list_index in seq_along(total_codifications)) {
     new_pathogenicity <- c()
-    for (element_index in seq_along(pathogenicity[[list_index]])) {
+    for (element_index in seq_along(total_codifications[[list_index]])) {
       gene_query <- paste(genes_mutated[[list_index]][[element_index]], "[gene]", total_codifications[[list_index]][[element_index]])
       res <- rentrez::entrez_search(db = "clinvar", term = gene_query)
       if (length(res$ids) != 0) {
@@ -44,4 +44,3 @@ search_ncbi_clinvar <- function(pathogenicity, genes_mutated, total_codification
   }
   return(searched_pathogenicity)
 }
-
