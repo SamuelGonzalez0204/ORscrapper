@@ -1,5 +1,3 @@
-
-
 #' Read content from a PDF file
 #'
 #' This function extracts the text content from a PDF file and splits it into individual lines.
@@ -13,7 +11,7 @@
 #' lines <- read_pdf_content(files[1])
 #' head(lines)
 #'
-#' @import pdftools
+#' @importFrom pdftools pdf_text
 #' @export
 read_pdf_content <- function(file_path) {
   doc <- pdftools::pdf_text(file_path)
