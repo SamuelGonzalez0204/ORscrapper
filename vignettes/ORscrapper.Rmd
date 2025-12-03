@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-devtools::install_github("SamuelGonzalez0204/ORscrapper")
+library(ORscrapper)
 ```
 
 ## Introduction
@@ -186,7 +186,7 @@ fusions <- extract_fusions(lines, mutations)
 
 Query the NCBI ClinVar database to retrieve pathogenicity classifications for detected mutations.
 
-```{r}
+```{r, eval=FALSE}
 search_pathogenity <- search_ncbi_clinvar(pathogenity, mutateGenes, codifications)
 ```
 

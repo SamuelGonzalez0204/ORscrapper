@@ -5,8 +5,6 @@
 #' @param lines Character vector. The lines of text to search within.
 #' @param search_text Character. The regular expression pattern to match.
 #' @return The extracted value as a character, or "Null" if not found.
-#'
-#' @export
 extract_variable <- function(lines, search_text) {
   matched_indices <- grep(search_text, lines)
   if (length(matched_indices) != 0) {
