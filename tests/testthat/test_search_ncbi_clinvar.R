@@ -4,6 +4,7 @@ library(mockery)
 if (requireNamespace("mockery", quietly = TRUE)) {
 # Step 1: Test if the function correctly retrieves pathogenicity information from NCBI ClinVar
 test_that("search_ncbi_clinvar correctly retrieves pathogenicity information", {
+  skip_if_not_installed("mockery")
 
   # Create sample input data
   pathogenicity <- list(list("Unknown", "Likely pathogenic"))

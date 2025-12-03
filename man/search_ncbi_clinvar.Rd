@@ -20,19 +20,24 @@ An updated list of pathogenicity classifications based on NCBI ClinVar search re
 This function queries the NCBI ClinVar database for germline classifications based on gene and codification data.
 }
 \examples{
+\dontrun{
 InputPath <- system.file("extdata", package = "ORscrapper")
 files <- read_pdf_files(InputPath)
 lines <- read_pdf_content(files[1])  # Example with the first file
 
 genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
-genes <- readxl::read_excel(genes_file)
-mutations <- unique(genes$GEN)
 
-TableValues <- extract_values_from_tables(lines, mutations)
-mutateGenes <- TableValues[[1]]
-pathogenity <- TableValues[[2]]
-codifications <- TableValues[[4]]
+if (requireNamespace("readxl", quietly = TRUE)) {
+  genes <- readxl::read_excel(genes_file)
+  mutations <- unique(genes$GEN)
 
-search_pathogenity <- search_ncbi_clinvar(pathogenity, mutateGenes, codifications)
+  TableValues <- extract_values_from_tables(lines, mutations)
+  mutateGenes <- TableValues[[1]]
+  pathogenity <- TableValues[[2]]
+  codifications <- TableValues[[4]]
+
+  search_pathogenity <- search_ncbi_clinvar(pathogenity, mutateGenes, codifications)
+}
+}
 
 }

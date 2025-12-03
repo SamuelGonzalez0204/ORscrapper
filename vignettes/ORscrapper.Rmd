@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-library(ORscrapper)
+devtools::install_github("SamuelGonzalez0204/ORscrapper")
 ```
 
 ## Introduction
@@ -83,7 +83,7 @@ ORscrapper is designed to process reports in Spanish. However, it can be adapted
 
 For testing and reference, the package includes a sample report in the repository folder:
 
-inst/extdata/135.6ANONIMO.pdf
+inst/extdata/100.1-example.pdf
 
 Users can utilize this file to better understand the expected input data format.
 
@@ -115,14 +115,14 @@ search_ncbi_clinvar(): This function queries the NCBI ClinVar database for germl
 
 # Step 1: Load and Process PDF Files
 
-First, retrieve a list of all PDF files from the specified directory using the LeerFicherosPDF() function.
+First, retrieve a list of all PDF files from the specified directory using the read_pdf_files() function.
 
 ```{r}
 if (!requireNamespace("readxl", quietly = TRUE)) {
   stop("The readxl package is required for this vignette, install it with install.packages('readxl').")
 }
 InputPath <- system.file("extdata", package = "ORscrapper")
-files <- read_pdf_files(InputPath)
+files <- ORscrapper::read_pdf_files(InputPath)
 genes_file <- system.file("extdata/Genes.xlsx", package = "ORscrapper")
 genes <- readxl::read_excel(genes_file)
 mutations <- unique(genes$GEN)
@@ -130,10 +130,10 @@ mutations <- unique(genes$GEN)
 
 # Step 2: Extract Text from PDFs
 
-Read the content of each PDF file and split it into lines using LeerDocumento().
+Read the content of each PDF file and split it into lines using read_pdf_content().
 
 ```{r}
-lines <- read_pdf_content(files[1])  # Example with the first file
+lines <- ORscrapper::read_pdf_content(files[1])  # Example with the first file
 head(lines)
 ```
 

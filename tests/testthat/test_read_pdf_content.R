@@ -1,7 +1,7 @@
 test_that("Testing the read_pdf_content function", {
 
   # Step 1: Define the test PDF file path (you can use an example PDF in the extdata folder)
-  file_path <- system.file("extdata", "135.6ANONIMO.pdf", package = "ORscrapper")
+  file_path <- system.file("extdata", "100.1-example.pdf", package = "ORscrapper")
 
   # Step 2: Call the function to extract content from the PDF
   result <- read_pdf_content(file_path)
