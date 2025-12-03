@@ -9,6 +9,8 @@
 #' InputPath <- system.file("extdata", package = "ORscrapper")
 #' files <- read_pdf_files(InputPath)
 #'
+#' @importFrom readxl read_excel
+#'
 #' @export
 read_pdf_files <- function(path) {
   pdf_files <- list.files(path = path, pattern = "\\.pdf$", full.names = TRUE, recursive = TRUE)
